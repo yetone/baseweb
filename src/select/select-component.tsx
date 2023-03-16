@@ -34,6 +34,7 @@ import type { SelectProps, SelectState, Value, Option, ChangeAction } from './ty
 import { expandValue, normalizeOptions } from './utils';
 
 import type { SyntheticEvent, ChangeEvent } from 'react';
+import getEventTarget from '../utils/getEventTarget';
 
 function Noop() {
   return null;
@@ -184,8 +185,9 @@ class Select extends React.Component<SelectProps, SelectState> {
   // Handle touch outside on mobile to dismiss menu, ensures that the
   // touch target is not within the anchor DOM node.
   handleTouchOutside = (event: TouchEvent) => {
-    if (containsNode(this.dropdown.current, event.target)) return;
-    if (!containsNode(this.anchor.current, event.target)) {
+    const eventTarget = getEventTarget(event);
+    if (containsNode(this.dropdown.current, eventTarget)) return;
+    if (!containsNode(this.anchor.current, eventTarget)) {
       this.closeMenu();
     }
   };
@@ -310,6 +312,8 @@ class Select extends React.Component<SelectProps, SelectState> {
   };
 
   handleBlur = (event: React.FocusEvent | MouseEvent) => {
+    const eventTarget = getEventTarget(event as MouseEvent);
+
     if (event.relatedTarget) {
       if (
         containsNode(this.anchor.current, event.relatedTarget) ||
@@ -317,7 +321,7 @@ class Select extends React.Component<SelectProps, SelectState> {
       ) {
         return;
       }
-    } else if (containsNode(this.anchor.current, event.target)) {
+    } else if (containsNode(this.anchor.current, eventTarget)) {
       return;
     }
 
@@ -340,10 +344,11 @@ class Select extends React.Component<SelectProps, SelectState> {
       this.justSelected = false;
       return;
     }
-    if (containsNode(this.dropdown.current, event.target)) return;
+    const eventTarget = getEventTarget(event);
+    if (containsNode(this.dropdown.current, eventTarget)) return;
 
     const isFocused = this.state.isFocused || this.state.isPseudoFocused;
-    if (isFocused && !containsNode(this.anchor.current, event.target)) {
+    if (isFocused && !containsNode(this.anchor.current, eventTarget)) {
       this.handleBlur(event);
     }
   };
