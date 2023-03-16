@@ -1,6 +1,6 @@
 {
-  "name": "baseui",
-  "version": "14.0.0",
+  "name": "baseui-sd",
+  "version": "14.0.2",
   "description": "A React Component library implementing the Base design language",
   "keywords": [
     "react",
@@ -106,7 +106,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": false
   },
   "engines": {
     "node": ">=18.0.0"
